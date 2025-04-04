@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, ChangeEvent } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import styles from './dashboard.module.css';
 
@@ -20,16 +21,29 @@ const Dashboard = () => {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [signOutLoading, setSignOutLoading] = useState(false);
   const router = useRouter();
-  const API_URL =  'https://job-os-internship-2.vercel.app';
+  // const API_URL =  'https://job-os-internship-2.vercel.app';
+  const API_URL =  'http://localhost:5000';
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/signin');
+      return;
+    }
+
+    // Decode token to get its expiration time
+    const decodedToken = jwtDecode(token);
+    const currentTime = Date.now() / 1000; // in seconds
+
+  
+
+    if (decodedToken.exp && decodedToken.exp < currentTime) {
+      router.push('/signin');
     } else {
       fetchUploads(token);
     }
-  }, []);
+  }, [router]);
 
   const fetchUploads = async (token: string) => {
     try {

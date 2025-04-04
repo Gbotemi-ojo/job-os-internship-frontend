@@ -9,7 +9,8 @@ const Signin = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://job-os-internship-2.vercel.app';
+  // const API_URL = 'https://job-os-internship-2.vercel.app';
+  const API_URL =  'http://localhost:5000';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
